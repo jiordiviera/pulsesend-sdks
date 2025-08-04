@@ -53,3 +53,4 @@ packages/go/bin/
 examples/*/node_modules/
 examples/*/dist/
 examples/*/vendor/
+node_modules
