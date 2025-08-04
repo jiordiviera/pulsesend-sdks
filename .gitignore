@@ -1,1 +1,55 @@
-.
+# Dependencies
+node_modules/
+*/node_modules/
+bun.lockb
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+*.lcov
+
+# Cache
+.cache/
+.parcel-cache/
+.turbo/
+
+# Package managers
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# SDKs specific
+packages/*/dist/
+packages/*/build/
+packages/php/vendor/
+packages/python/dist/
+packages/python/*.egg-info/
+packages/go/bin/
+
+# Examples
+examples/*/node_modules/
+examples/*/dist/
+examples/*/vendor/
