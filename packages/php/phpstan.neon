@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    paths:
+        - src
+    excludePaths:
+        - tests
+    ignoreErrors:
+        - '#Cannot call method .* on mixed#'
+    checkMissingIterableValueType: false
