@@ -1,0 +1,148 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      changed-packages: ${{ steps.changes.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed packages
+        id: changes
+        run: |
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "packages=[\"javascript\",\"php\",\"python\",\"go\"]" >> $GITHUB_OUTPUT
+          else
+            changed=$(git diff --name-only ${{ github.event.before }}..${{ github.sha }} | grep "^packages/" | cut -d'/' -f2 | sort -u | jq -R -s -c 'split("\n")[:-1]')
+            echo "packages=$changed" >> $GITHUB_OUTPUT
+          fi
+
+  test-javascript:
+    needs: setup
+    if: contains(fromJson(needs.setup.outputs.changed-packages), 'javascript')
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run --filter='./packages/javascript' lint
+
+      - name: Type check
+        run: bun run --filter='./packages/javascript' typecheck
+
+      - name: Test
+        run: bun run --filter='./packages/javascript' test
+
+      - name: Build
+        run: bun run --filter='./packages/javascript' build
+
+  test-php:
+    needs: setup
+    if: contains(fromJson(needs.setup.outputs.changed-packages), 'php')
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.0', '8.1', '8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, xml, ctype, json, curl
+          coverage: xdebug
+
+      - name: Install dependencies
+        working-directory: packages/php
+        run: composer install --prefer-dist --no-progress
+
+      - name: PHPStan
+        working-directory: packages/php
+        run: composer run phpstan
+
+      - name: Tests
+        working-directory: packages/php
+        run: composer run test
+
+  test-python:
+    needs: setup
+    if: contains(fromJson(needs.setup.outputs.changed-packages), 'python')
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install dependencies
+        working-directory: packages/python
+        run: poetry install
+
+      - name: Lint
+        working-directory: packages/python
+        run: poetry run ruff check
+
+      - name: Type check
+        working-directory: packages/python
+        run: poetry run mypy .
+
+      - name: Tests
+        working-directory: packages/python
+        run: poetry run pytest
+
+  test-go:
+    needs: setup
+    if: contains(fromJson(needs.setup.outputs.changed-packages), 'go')
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ['1.19', '1.20', '1.21']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Download dependencies
+        working-directory: packages/go
+        run: go mod download
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          working-directory: packages/go
+
+      - name: Tests
+        working-directory: packages/go
+        run: go test -race -coverprofile=coverage.out ./...
+
+      - name: Build
+        working-directory: packages/go
+        run: go build ./...
