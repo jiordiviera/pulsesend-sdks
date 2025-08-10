@@ -1,5 +1,4 @@
 import { PulseSend } from '../src/client'
-import { InvalidApiKeyError } from '../src/errors'
 
 describe('PulseSend Client', () => {
   describe('constructor', () => {
@@ -13,7 +12,7 @@ describe('PulseSend Client', () => {
     it('should create client with config object', () => {
       const client = new PulseSend({
         apiKey: 'pk_test_123',
-        baseUrl: 'https://custom.api.com'
+        baseUrl: 'https://custom.api.com',
       })
       expect(client).toBeInstanceOf(PulseSend)
     })
@@ -48,17 +47,17 @@ describe('PulseSend Client', () => {
       const mockResponse = {
         success: true,
         data: { status: 'ok', timestamp: '2023-01-01T00:00:00Z' },
-        requestId: 'req_123'
+        requestId: 'req_123',
       }
 
-      const httpClient = (client as any).httpClient
+      const httpClient = client.httpClient
       jest.spyOn(httpClient, 'get').mockResolvedValue(mockResponse)
 
       const result = await client.ping()
-      
+
       expect(result).toEqual({
         status: 'ok',
-        timestamp: '2023-01-01T00:00:00Z'
+        timestamp: '2023-01-01T00:00:00Z',
       })
       expect(httpClient.get).toHaveBeenCalledWith('/ping')
     })
@@ -67,10 +66,10 @@ describe('PulseSend Client', () => {
       const mockResponse = {
         success: false,
         error: { code: 'PING_FAILED', message: 'Ping failed' },
-        requestId: 'req_123'
+        requestId: 'req_123',
       }
 
-      const httpClient = (client as any).httpClient
+      const httpClient = client.httpClient
       jest.spyOn(httpClient, 'get').mockResolvedValue(mockResponse)
 
       await expect(client.ping()).rejects.toThrow('Ping failed')

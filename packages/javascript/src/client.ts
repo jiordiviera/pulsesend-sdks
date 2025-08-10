@@ -4,7 +4,7 @@ import { AnalyticsService } from './services/analytics'
 import { PulseSendConfig } from './types'
 
 export class PulseSend {
-  private httpClient: HttpClient
+  public httpClient: HttpClient
 
   public readonly emails: EmailsService
   public readonly analytics: AnalyticsService
