@@ -6,7 +6,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "bun@1.0.0",
+  "packageManager": "bun@1.2.18",
   "scripts": {
     "build": "bun run --filter='./packages/*' build",
     "test": "bun run --filter='./packages/*' test",
@@ -31,6 +31,10 @@
     "type": "git",
     "url": "https://github.com/jiordiviera/pulsesend-sdks"
   },
-  "author": "PulseSend Team",
+  "author": {
+    "name": "Jiordi Viera",
+    "email": "jiordikengne@gmail.com",
+    "url": "https://github.com/jiordiviera"
+  },
   "license": "MIT"
 }

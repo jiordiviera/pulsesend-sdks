@@ -1,9 +1,13 @@
 {
-  "name": "@pulsesend/javascript",
+  "name": "@jiordiviera/pulsesend-sdks",
   "version": "0.1.0",
   "description": "Official JavaScript/TypeScript SDK for PulseSend API",
   "keywords": ["pulsesend", "email", "sdk", "api", "typescript"],
-  "author": "PulseSend Team",
+  "author": {
+    "name": "Jiordi Viera",
+    "email": "jiordikengne@gmail.com",
+    "url": "https://github.com/jiordiviera"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -35,7 +39,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "jest",
+    "test": "bunx jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint src --ext .ts,.tsx",
@@ -49,13 +53,13 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.8",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.9.0",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
     "eslint": "^8.54.0",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.1",
+    "jest": "^30.0.5",
+    "ts-jest": "^29.4.1",
     "tsup": "^8.0.1",
     "typescript": "^5.3.2"
   },
