@@ -1,5 +1,5 @@
 {
-  "name": "@jiordiviera/pulsesend-sdks",
+  "name": "@pulsesend/sdks",
   "version": "0.1.0",
   "description": "Official JavaScript/TypeScript SDK for PulseSend API",
   "keywords": ["pulsesend", "email", "sdk", "api", "typescript"],

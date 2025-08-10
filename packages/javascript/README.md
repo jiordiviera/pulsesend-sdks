@@ -1,33 +1,34 @@
-# @pulsesend/javascript
+# @pulsesend/sdks
 
 Official JavaScript/TypeScript SDK for the PulseSend API.
 
 ## Installation
 
 ```bash
-npm install @pulsesend/javascript
+npm install @pulsesend/sdks
 # or
-yarn add @pulsesend/javascript
+yarn add @pulsesend/sdks  
 # or
-bun add @pulsesend/javascript
+bun add @pulsesend/sdks
 ```
 
 ## Quick Start
 
 ```typescript
-import { PulseSend } from '@pulsesend/javascript'
+import { PulseSend } from '@pulsesend/sdks'
 
 const client = new PulseSend('pk_live_your_api_key_here')
 
 // Send an email
 await client.emails.send({
   to: ['user@example.com'],
-  from: 'noreply@yoursite.com',
-  subject: 'Welcome {{name}}!',
-  html: '<h1>Hello {{name}}!</h1><p>Welcome to our platform.</p>',
+  from: 'noreply@pulsesend.cm',
+  subject: 'Bienvenue {{name}}!',
+  html: '<h1>Salut {{name}}!</h1><p>Merci de rejoindre PulseSend Cameroun 🇨🇲</p>',
   variables: {
-    name: 'John Doe'
-  }
+    name: 'Jean Mballa'
+  },
+  tags: ['onboarding', 'cameroun']
 })
 ```
 
@@ -135,7 +136,7 @@ import {
   NetworkError,
   TimeoutError,
   ServerError
-} from '@pulsesend/javascript'
+} from '@pulsesend/sdks'
 
 try {
   await client.emails.send(emailData)
@@ -155,7 +156,7 @@ try {
 The SDK is written in TypeScript and provides full type definitions:
 
 ```typescript
-import { SendEmailRequest, SendEmailResponse } from '@pulsesend/javascript'
+import { SendEmailRequest, SendEmailResponse } from '@pulsesend/sdks'
 
 const request: SendEmailRequest = {
   to: ['user@example.com'],
